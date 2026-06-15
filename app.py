@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -13,6 +14,9 @@ from sklearn.metrics import (
 )
 import warnings
 warnings.filterwarnings("ignore")
+
+# HF Hub dataset repo — update <your-hf-username> after you create the dataset
+HF_DATASET_REPO = "varadkamtikar/creditcard-fraud"
 
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
@@ -71,8 +75,26 @@ st.markdown("""
 # ── Data loading (cached) ────────────────────────────────────────────────────
 @st.cache_data(show_spinner="Loading dataset…")
 def load_data():
-    df = pd.read_csv("creditcard.csv")
-    return df
+    local = "creditcard.csv"
+    if os.path.exists(local):
+        return pd.read_csv(local)
+    # Running in the cloud — pull from Hugging Face Hub dataset repo
+    try:
+        from huggingface_hub import hf_hub_download
+        path = hf_hub_download(
+            repo_id=HF_DATASET_REPO,
+            filename="creditcard.csv",
+            repo_type="dataset",
+        )
+        return pd.read_csv(path)
+    except Exception as e:
+        st.error(
+            f"Could not load dataset locally or from Hugging Face Hub.\n\n"
+            f"Make sure `creditcard.csv` is present locally, or that the "
+            f"HF dataset repo `{HF_DATASET_REPO}` is public and contains the file.\n\n"
+            f"Error: {e}"
+        )
+        st.stop()
 
 
 @st.cache_data(show_spinner="Sampling data for modelling…")
