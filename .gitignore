@@ -1,3 +1,21 @@
+# Dataset (too large for GitHub — download separately)
 creditcard.csv
-creditcard.csv
-creditcard.csv
+
+# Python virtual environment
+.venv/
+
+# macOS metadata
+.DS_Store
+
+# Knowledge-graph cache
+.code-review-graph/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Environment variable files
+.env
