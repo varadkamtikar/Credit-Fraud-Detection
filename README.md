@@ -1,3 +1,15 @@
+---
+title: Credit Card Fraud Detection
+emoji: 💳
+colorFrom: blue
+colorTo: red
+sdk: streamlit
+sdk_version: "1.58.0"
+python_version: "3.12"
+app_file: app.py
+pinned: false
+---
+
 # 💳 Credit Card Fraud Detection
 
 An end-to-end machine-learning project that detects fraudulent credit card transactions using anomaly-detection algorithms, wrapped in a fully interactive **Streamlit dashboard**.
