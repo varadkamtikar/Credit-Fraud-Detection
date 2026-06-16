@@ -1,4 +1,6 @@
+import io
 import os
+import requests
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -15,8 +17,11 @@ from sklearn.metrics import (
 import warnings
 warnings.filterwarnings("ignore")
 
-# HF Hub dataset repo — update <your-hf-username> after you create the dataset
-HF_DATASET_REPO = "varadkamtikar/creditcard-fraud"
+# GitHub Release asset URL for the dataset (used when running in the cloud)
+GITHUB_DATA_URL = (
+    "https://github.com/varadkamtikar/Credit-Fraud-Detection"
+    "/releases/download/v1.0/creditcard.csv"
+)
 
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
@@ -78,20 +83,17 @@ def load_data():
     local = "creditcard.csv"
     if os.path.exists(local):
         return pd.read_csv(local)
-    # Running in the cloud — pull from Hugging Face Hub dataset repo
+    # Running in the cloud — download from GitHub Release asset
     try:
-        from huggingface_hub import hf_hub_download
-        path = hf_hub_download(
-            repo_id=HF_DATASET_REPO,
-            filename="creditcard.csv",
-            repo_type="dataset",
-        )
-        return pd.read_csv(path)
+        with st.spinner("Downloading dataset (~144 MB), this may take a moment…"):
+            response = requests.get(GITHUB_DATA_URL, timeout=120)
+            response.raise_for_status()
+        return pd.read_csv(io.BytesIO(response.content))
     except Exception as e:
         st.error(
-            f"Could not load dataset locally or from Hugging Face Hub.\n\n"
-            f"Make sure `creditcard.csv` is present locally, or that the "
-            f"HF dataset repo `{HF_DATASET_REPO}` is public and contains the file.\n\n"
+            "Could not load the dataset. "
+            "Make sure `creditcard.csv` is present locally, or that the "
+            "GitHub Release `v1.0` exists and contains `creditcard.csv`.\n\n"
             f"Error: {e}"
         )
         st.stop()

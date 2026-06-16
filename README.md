@@ -1,18 +1,8 @@
----
-title: Credit Card Fraud Detection
-emoji: 💳
-colorFrom: blue
-colorTo: red
-sdk: streamlit
-sdk_version: "1.58.0"
-python_version: "3.12"
-app_file: app.py
-pinned: false
----
-
 # 💳 Credit Card Fraud Detection
 
 An end-to-end machine-learning project that detects fraudulent credit card transactions using anomaly-detection algorithms, wrapped in a fully interactive **Streamlit dashboard**.
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://credit-fraud-detection.streamlit.app)
 
 ---
 
@@ -36,7 +26,7 @@ Credit Card Fraud Detection/
 └── README.md
 ```
 
-> **Note:** `creditcard.csv` is not included in this repo (150 MB). See the [Dataset](#-dataset) section below.
+> **Note:** `creditcard.csv` is not included in this repo (144 MB). It is attached as a release asset under [Releases → v1.0](https://github.com/varadkamtikar/Credit-Fraud-Detection/releases/tag/v1.0). The app downloads it automatically when running in the cloud.
 
 ---
 
@@ -114,7 +104,34 @@ Four interactive tabs:
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Deploy on Streamlit Community Cloud
+
+### Step 1 — Create a GitHub Release (one-time, for the dataset)
+
+The CSV is too large for a regular Git commit. Attach it as a GitHub Release asset instead:
+
+1. Go to your repo on GitHub → **Releases** → **Draft a new release**
+2. Set the tag to `v1.0` and the title to `v1.0 — Initial release`
+3. Under **"Attach binaries"**, upload `creditcard.csv`
+4. Click **Publish release**
+
+The app will automatically download it from this release when running in the cloud.
+
+### Step 2 — Deploy on Streamlit Community Cloud
+
+1. Go to **[share.streamlit.io](https://share.streamlit.io)** and sign in with GitHub
+2. Click **"New app"**
+3. Select:
+   - **Repository:** `varadkamtikar/Credit-Fraud-Detection`
+   - **Branch:** `main`
+   - **Main file path:** `app.py`
+4. Click **Deploy**
+
+Your app will be live at `https://<your-app-name>.streamlit.app` in ~2 minutes.
+
+---
+
+## 💻 Run Locally
 
 ### 1. Clone the repository
 
@@ -164,6 +181,7 @@ Open your browser at **http://localhost:8501**
 | `matplotlib` | 3.10.8 | Static plotting (notebook) |
 | `seaborn` | 0.13.2 | Statistical plots (notebook) |
 | `pyarrow` | 24.0.0 | Fast data serialisation |
+| `requests` | 2.34.2 | Dataset download in cloud |
 
 Python **3.12** was used during development.
 
@@ -199,7 +217,7 @@ The dashboard sidebar exposes two tunable parameters:
 | **Sample fraction** | Fraction of the 284 K-row dataset used to train models. Lower = faster; higher = more accurate. |
 | **Contamination rate** | Expected fraction of anomalies in the data. `auto` derives this from the actual fraud rate in the sample. |
 
-Changes take effect immediately and models are re-trained with caching.
+Changes take effect immediately and models are re-cached automatically.
 
 ---
 
